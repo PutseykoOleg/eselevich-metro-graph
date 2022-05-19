@@ -1,2 +1,6 @@
-# VS Code
-**/.vs
+# vs code
+.vs
+
+# builds
+**/Debug
+**/Release
