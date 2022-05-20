@@ -15,6 +15,7 @@ public class Vertex<T> : IVertex<T> where T : notnull
 
     // Классы
     public Vertex() { }
+
     public Vertex(T value)
     {
         this.Value = value;

@@ -5,10 +5,10 @@ using Metro.Graph;
  * Данная программа работает с любым неориентированным взвешенным графом,
  * т.е. для работы с метро другого города необходимо изменить входные данные,
  * представленные ниже.
- * 
+ *
  * В данном случае в качестве весов ребер графа было выбрано время пути между двумя
  * соседними станциями. При необходимосит его можно заменить на расстояние между этими станциями.
- * 
+ *
  * Время пути взято с сайта https://yandex.ru/metro/saint-petersburg?scheme_id=sc60983525
  */
 
@@ -105,25 +105,59 @@ graph.AddEdge("Владимирская", "Достоевская", 3);
 
 // Алгоритм Флойда-Уоршелла
 FloydWarshallAlgorithm<string> fwAlgorithm = new(graph);
-// Результат вичисления кратчайшего пути - пара [<список значений вершин, т.е. сам путь>, <длина пути>]
-var result = fwAlgorithm.GetShortestPath("Беговая", "Площадь Ленина");
 
-// Путь
-var path = result.First;
-// Длина пути (в данном случае - общее время в пути)
-var length = result.Second;
-
-// Вывод результата в консоль
-Console.WriteLine($"\nВремя в пути: {length} мин");
-Console.WriteLine("\nМаршрут:");
-
-for (int i = 0; i < path.Count; i++)
+// Взаимодействие с консолью
+while (true)
 {
-    if (i == 0)
-        Console.WriteLine(" _\n |");
+    string from = "";
+    string to = "";
 
-    Console.WriteLine($" | - {path[i]}\n |");
+    try
+    {
+        // Запрос ввода начала пути
+        Console.Write("Откуда: ");
+        from = Console.ReadLine() ?? "";
 
-    if (i == path.Count - 1)
-        Console.WriteLine(" V");
+        if (!graph.HasVertex(from))
+        {
+            throw new Exception($"Станция \"{from}\" не найдена");
+        }
+
+        // Запрос ввода конца пути
+        Console.Write("Куда: ");
+        to = Console.ReadLine() ?? "";
+
+        if (!graph.HasVertex(to))
+        {
+            throw new Exception($"Станция \"{to}\" не найдена");
+        }
+
+        // Результат вичисления кратчайшего пути - пара [<список значений вершин, т.е. сам путь>, <длина пути>]
+        var result = fwAlgorithm.GetShortestPath(from, to);
+
+        // Путь
+        var path = result.First;
+
+        // Длина пути (в данном случае - общее время в пути)
+        var time = result.Second;
+
+        // Вывод результата в консоль
+        Console.WriteLine($"\nВремя в пути: {time} мин");
+        Console.WriteLine("\nМаршрут:");
+
+        for (int i = 0; i < path.Count; i++)
+        {
+            if (i == 0)
+                Console.WriteLine(" _\n |");
+
+            Console.WriteLine($" | - {path[i]}\n |");
+
+            if (i == path.Count - 1)
+                Console.WriteLine(" V\n");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"\nError: {ex.Message}. Попробуйте еще раз...\n");
+    }
 }

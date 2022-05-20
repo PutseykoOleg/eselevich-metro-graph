@@ -18,7 +18,12 @@ public class Graph<T> where T : notnull
     public void AddEdge(T firstVertexValue, T secondVertexValue, int weight)
     {
         // Новое ребро
-        Edge<T> edge = new(this.GetVertex(firstVertexValue, true), this.GetVertex(secondVertexValue, true), weight);
+        Edge<T> edge =
+            new(
+                this.GetVertex(firstVertexValue, true),
+                this.GetVertex(secondVertexValue, true),
+                weight
+            );
 
         // Пройтись по вершинам ребра
         for (int i = 0; i < 2; i++)
@@ -33,7 +38,10 @@ public class Graph<T> where T : notnull
             }
 
             // Если нового ребра еще нет в списке прилежащих к текущей вершине, то добавить
-            if (!this._IsEdgeContained(vertex, edge) && !this._IsEdgeContained(vertex, edge.GetReverseEdge()))
+            if (
+                !this._IsEdgeContained(vertex, edge)
+                && !this._IsEdgeContained(vertex, edge.GetReverseEdge())
+            )
             {
                 this.LinkedEdges[vertex].Add(edge);
             }
@@ -56,7 +64,8 @@ public class Graph<T> where T : notnull
             }
 
             // Если необходимо добавить новую вершину при отсутствии в списке вершины с заданным значением
-            if (addIfNotExist) {
+            if (addIfNotExist)
+            {
                 // Создать вершину
                 Vertex<T> newVertex = new(value);
 
@@ -66,11 +75,13 @@ public class Graph<T> where T : notnull
 
                 // Вернуть только что созданную вершину
                 return newVertex;
-            } 
+            }
             // Иначе выбросить ошибку
             else
             {
-                throw new ArgumentException($"Вершина со значением \"{value.ToString()}\" не найдена");
+                throw new ArgumentException(
+                    $"Вершина со значением \"{value.ToString()}\" не найдена"
+                );
             }
         }
         catch (Exception ex)
@@ -94,6 +105,19 @@ public class Graph<T> where T : notnull
         return this.Vertices.IndexOf(vertex);
     }
 
+    // Проверка на существование вершины
+    public bool HasVertex(T value)
+    {
+        foreach (Vertex<T> vertex in this.Vertices)
+        {
+            if (vertex.Value.Equals(value))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Преобразование графа в матрицу смежности, значениями которой являются веса ребер,
     // а строки и столбцы - индексы вершин из списка
     public Matrix ToMatrix()
@@ -104,7 +128,7 @@ public class Graph<T> where T : notnull
         {
             matrix.Add(new());
 
-            for(int j = 0; j < this.Vertices.Count; j++)
+            for (int j = 0; j < this.Vertices.Count; j++)
             {
                 matrix[i].Add(this.GetStraightWay(this.Vertices[i], this.Vertices[j]));
             }
@@ -118,7 +142,7 @@ public class Graph<T> where T : notnull
     public int GetStraightWay(Vertex<T> firstVertex, Vertex<T> secondVertex)
     {
         // Если вершины совпадают, то вернуть максимально возможное целое число ("бесконечность")
-        if(firstVertex == secondVertex)
+        if (firstVertex == secondVertex)
         {
             return Int32.MaxValue;
         }
@@ -127,10 +151,13 @@ public class Graph<T> where T : notnull
         List<Edge<T>> linkedEdges = this.LinkedEdges[firstVertex];
 
         // Пройтись по каждому
-        foreach(Edge<T> edge in linkedEdges)
+        foreach (Edge<T> edge in linkedEdges)
         {
             // Если расстояние между заданными вершинами и вершинами, лежащими на текущем ребре, равно
-            if((edge.Vertices[0]  == firstVertex && edge.Vertices[1] == secondVertex) || (edge.Vertices[1] == firstVertex && edge.Vertices[0] == secondVertex))
+            if (
+                (edge.Vertices[0] == firstVertex && edge.Vertices[1] == secondVertex)
+                || (edge.Vertices[1] == firstVertex && edge.Vertices[0] == secondVertex)
+            )
             {
                 // Вернуть это расстояние
                 return edge.Weight;
@@ -145,11 +172,11 @@ public class Graph<T> where T : notnull
     // Проверка на содержание ребра в спике прилежащих к заданной вершине
     private bool _IsEdgeContained(Vertex<T> vertex, Edge<T> edge)
     {
-        foreach(Edge<T> otherEdge in this.LinkedEdges[vertex])
+        foreach (Edge<T> otherEdge in this.LinkedEdges[vertex])
         {
-            if (otherEdge == edge) return true;
+            if (otherEdge == edge)
+                return true;
         }
         return false;
     }
 }
-

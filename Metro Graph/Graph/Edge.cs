@@ -30,28 +30,21 @@ public struct Edge<T> where T : notnull
     public static bool operator ==(Edge<T> firstEdge, Edge<T> secondEdge)
     {
         // Значения обоих ребер в удобном виде
-        List<List<T>> values = new()
-        {
+        List<List<T>> values =
             new()
             {
-                firstEdge.Vertices[0].Value,
-                firstEdge.Vertices[1].Value
-            },
-            new()
-            {
-                secondEdge.Vertices[0].Value,
-                secondEdge.Vertices[1].Value
-            }
-        };
+                new() { firstEdge.Vertices[0].Value, firstEdge.Vertices[1].Value },
+                new() { secondEdge.Vertices[0].Value, secondEdge.Vertices[1].Value }
+            };
 
         // Т.к. рассматривается неориентированный граф, то ребра вида [a, b] и [a, b] будут равны
-        bool areValuesEqual = values[0][0].Equals(values[1][0]) && values[0][1].Equals(values[1][1]);
+        bool areValuesEqual =
+            values[0][0].Equals(values[1][0]) && values[0][1].Equals(values[1][1]);
         // и ребра вида [a, b] и [b, a] тоже будут равны
-        bool areValuesReverseEqual = values[0][0].Equals(values[1][1]) && values[0][1].Equals(values[1][0]);
+        bool areValuesReverseEqual =
+            values[0][0].Equals(values[1][1]) && values[0][1].Equals(values[1][0]);
 
         // Если оба равенства справедливы, и вес ребер совпадает, то они равны
         return (areValuesEqual || areValuesReverseEqual) && firstEdge.Weight == secondEdge.Weight;
     }
-
-
 }

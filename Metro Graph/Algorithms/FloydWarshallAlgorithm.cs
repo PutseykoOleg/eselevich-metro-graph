@@ -38,7 +38,10 @@ public class FloydWarshallAlgorithm<T> where T : notnull
         // Если все уже было посчитано раньше, то вернуть результат из сохраненных значений матриц
         if (this._matrix != null && this._nextVertexIndexMatrix != null)
         {
-            return new Pair<List<T>, int>(this._GetPath(this._nextVertexIndexMatrix, startIndex, endIndex), this._matrix[startIndex][endIndex]);
+            return new Pair<List<T>, int>(
+                this._GetPath(this._nextVertexIndexMatrix, startIndex, endIndex),
+                this._matrix[startIndex][endIndex]
+            );
         }
 
         // Конвертация графа в матрицу
@@ -62,7 +65,13 @@ public class FloydWarshallAlgorithm<T> where T : notnull
 
                 // - Если не совпадают => если на пересечении - "бесконечность" => нет прямого пути из i в j =>
                 //   => оставляем "бесконечность"
-                this._nextVertexIndexMatrix[i].Add(i == j ? j : this._matrix[i][j] != Int32.MaxValue ? j : Int32.MaxValue);
+                this._nextVertexIndexMatrix[i].Add(
+                    i == j
+                      ? j
+                      : this._matrix[i][j] != Int32.MaxValue
+                          ? j
+                          : Int32.MaxValue
+                );
             }
         }
 
@@ -77,7 +86,11 @@ public class FloydWarshallAlgorithm<T> where T : notnull
                 {
                     // Если индексы строки и столбца не совпадают, т.е. не петля и при этом существует путь от i до j, проходящий
                     // через текущую вершину (k)
-                    if (i != j && this._matrix[i][k] != Int32.MaxValue && this._matrix[k][j] != Int32.MaxValue)
+                    if (
+                        i != j
+                        && this._matrix[i][k] != Int32.MaxValue
+                        && this._matrix[k][j] != Int32.MaxValue
+                    )
                     {
                         // Если такой путь меньше уже проложенного между i и j
                         if (this._matrix[i][k] + this._matrix[k][j] < this._matrix[i][j])
@@ -93,7 +106,10 @@ public class FloydWarshallAlgorithm<T> where T : notnull
         }
 
         // Вернуть пару <список значений вершин, т.е. путь> - <длина пути>
-        return new Pair<List<T>, int>(this._GetPath(this._nextVertexIndexMatrix, startIndex, endIndex), this._matrix[startIndex][endIndex]);
+        return new Pair<List<T>, int>(
+            this._GetPath(this._nextVertexIndexMatrix, startIndex, endIndex),
+            this._matrix[startIndex][endIndex]
+        );
     }
 
     // Восстановление пути между заданными вершинами
@@ -110,7 +126,7 @@ public class FloydWarshallAlgorithm<T> where T : notnull
         List<T> path = new() { this.Graph.GetVertexByIndex(startVertexIndex).Value };
 
         // Пока не дошли до конечной вершины
-        while(startVertexIndex != endVertexIndex)
+        while (startVertexIndex != endVertexIndex)
         {
             // Инициализация следующим в пути индексом
             startVertexIndex = nextVertexIndexMatrix[startVertexIndex][endVertexIndex];
@@ -122,4 +138,3 @@ public class FloydWarshallAlgorithm<T> where T : notnull
         return path;
     }
 }
-
