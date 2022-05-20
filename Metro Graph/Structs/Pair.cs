@@ -11,4 +11,3 @@ public struct Pair<F, S>
         this.Second = second;
     }
 }
-
